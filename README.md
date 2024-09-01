@@ -1,0 +1,1 @@
+This is a budgeting app that is meant to help individuals manage their personal finances. The app will feature tools for tracking income and expenses, providing insights into spending habits, and also allow the user to set savings goals for themselves.
