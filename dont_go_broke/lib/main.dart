@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'My Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Don\'t Go Broke '),
     );
   }
 }
