@@ -31,7 +31,6 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
-  String _inputText = ""; // Variable to store the text input
 
   void _incrementCounter() {
     setState(() {
@@ -64,7 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: TextField(
                 onChanged: (text) {
                   setState(() {
-                    _inputText = text; // Update the input text
+// Update the input text
                   });
                 },
                 decoration: const InputDecoration(
@@ -80,7 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: TextField(
                 onChanged: (text) {
                   setState(() {
-                    _inputText = text; // Update the input text
+// Update the input text
                   });
                 },
                 decoration: const InputDecoration(
