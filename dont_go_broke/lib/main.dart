@@ -69,7 +69,23 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'Input Text',
+                  labelText: 'Username',
+                ),
+              ),
+            ),
+            // Creates space between username and password text fields.
+            const SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: TextField(
+                onChanged: (text) {
+                  setState(() {
+                    _inputText = text; // Update the input text
+                  });
+                },
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Password',
                 ),
               ),
             ),
