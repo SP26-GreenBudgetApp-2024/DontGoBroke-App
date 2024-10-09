@@ -1,8 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 
+
 void main() {
   runApp(const MyApp());
+
+  FirebaseDatabase database = FirebaseDatabase.instance;
+  DatabaseReference ref = FirebaseDatabase.instance.ref();
+  
+  await Firebase.initializeAPP(
+    options: DefaultFirebaseOptions.currentPlatform,
+
+  );
+
+
 }
 
 class MyApp extends StatelessWidget {
@@ -29,7 +40,7 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
@@ -90,6 +101,15 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
+        
+        // Going to try to add a text section //
+        
+        
+        
+
+        
+        
+        
         child: Column(
           // Column is also a layout widget. It takes a list of children and
           // arranges them vertically. By default, it sizes itself to fit its
@@ -121,6 +141,21 @@ class _MyHomePageState extends State<MyHomePage> {
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
+    
+            @override
+        Widget build(BuildContext context){
+          return Padding(
+            padding: const EdgeInsets.all(32),
+            child: Text(
+              description,
+              softWrap: true,
+              ),
+          );
+
+          
+        }
     );
+
+    
   }
 }
