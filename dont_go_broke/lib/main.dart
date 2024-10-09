@@ -5,14 +5,25 @@ import 'package:firebase_database/firebase_database.dart';
 void main() {
   runApp(const MyApp());
 
+
+/*   Stocks, T.
+ 
+  Known thrown error for unused local variable, still part of the synchronization of the firebase
+  will implement the rest 
+
+  */
+  
   FirebaseDatabase database = FirebaseDatabase.instance;
   DatabaseReference ref = FirebaseDatabase.instance.ref();
   
+/*    Stocks,T. Portions of the firebase synchronization, need to work it completely through, on to do list ////    
+
+
   await Firebase.initializeAPP(
     options: DefaultFirebaseOptions.currentPlatform,
 
   );
-
+*/                                                                                                         /////
 
 }
 
