@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/pages/user_profile.dart';
+import 'user_profile.dart';
 
 class MainPage extends StatefulWidget {
   @override

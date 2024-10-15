@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/pages/main_page.dart';
+import 'main_page.dart';
 
 
 class CreateUsers extends StatefulWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/pages/create_users.dart';
-import 'package:myapp/pages/main_page.dart';
+import 'create_user.dart';
+import 'main_page.dart';
 
 // A StatefulWidget that represents the sign-in page.
 class SignInPage extends StatefulWidget {
