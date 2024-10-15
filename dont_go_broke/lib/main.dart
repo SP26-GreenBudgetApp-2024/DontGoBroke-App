@@ -62,8 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: TextField(
                 onChanged: (text) {
-                  setState(() {
-// Update the input text
+                  setState(() {// Update the input text
                   });
                 },
                 decoration: const InputDecoration(
@@ -78,8 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: TextField(
                 onChanged: (text) {
-                  setState(() {
-// Update the input text
+                  setState(() {// Update the input text
                   });
                 },
                 decoration: const InputDecoration(
