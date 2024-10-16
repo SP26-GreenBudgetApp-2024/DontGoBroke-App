@@ -3,6 +3,8 @@ import 'main_page.dart';
 
 
 class CreateUsers extends StatefulWidget {
+  const CreateUsers({super.key});
+
   @override
   _CreateUserScreenState createState() => _CreateUserScreenState();
 }
@@ -62,7 +64,7 @@ class _CreateUserScreenState extends State<CreateUsers> {
                   // Sign in logic
                   print("Sign in with email: $email");
                   //go to main page
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage(),),
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const MainPage(),),
                   );
                 } else {
                   print("Passwords do not match!");

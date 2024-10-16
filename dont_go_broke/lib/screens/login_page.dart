@@ -4,6 +4,8 @@ import 'main_page.dart';
 
 // A StatefulWidget that represents the sign-in page.
 class SignInPage extends StatefulWidget {
+  const SignInPage({super.key});
+
   @override
   _SignInPageState createState() => _SignInPageState();
 }
@@ -49,7 +51,7 @@ class _SignInPageState extends State<SignInPage> {
                 String password = passwordController.text;
                 print("Sign in with username: $username and password: $password");
 
-                Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage(),),
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const MainPage(),),
                 );
               },
               child: const Text("Sign In"),
@@ -58,7 +60,7 @@ class _SignInPageState extends State<SignInPage> {
             TextButton(
               onPressed: () {
                 // Navigate to Create User Account page
-                Navigator.push(context, MaterialPageRoute(builder: (context) => CreateUsers(),
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateUsers(),
                 ),);
 
               },
