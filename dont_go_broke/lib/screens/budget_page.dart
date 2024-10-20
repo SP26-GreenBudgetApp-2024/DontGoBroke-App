@@ -1,103 +1,101 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-
-
+import 'user_profile.dart';
+import '../utils/donut_chart.dart';
 
 class BudgetPage extends StatefulWidget {
   const BudgetPage({super.key});
 
   @override
-  _UserProfilePageState createState() => _UserProfilePageState();
+  _BudgetPageState createState() => _BudgetPageState();
 }
 
-class _UserProfilePageState extends State<BudgetPage> {
+class _BudgetPageState extends State<BudgetPage> {
+  double currentBalance = 1000.00; // Example balance
+  double monthlyIncome = 3000.00; // Example monthly income
+
+  // List of budget items
+  final List<Map<String, dynamic>> budgetItems = [
+    {'name': 'Rent', 'amount': 1200.0},
+    {'name': 'Car Payment', 'amount': 300.0},
+    {'name': 'Groceries', 'amount': 400.0},
+    {'name': 'Utilities', 'amount': 150.0},
+    {'name': 'Internet', 'amount': 60.0},
+    {'name': 'Entertainment', 'amount': 100.0},
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text("Budget Page"),
-        centerTitle: true,
+        title: const Text("Main Page"),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.person),
+            onPressed: () {
+              // Navigate to the UserProfilePage using named route
+              Navigator.pushNamed(context, '/profile');
+            },
+          ),
+        ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // Profile Picture and Name
-            Center(
-              child: Column(
-                children: [
-                  CircleAvatar(
-                    radius: 50,
-                    backgroundImage: const AssetImage('assets/profile_picture.png'), // Replace with actual profile picture
-                    child: IconButton(
-                      icon: const Icon(Icons.camera_alt, color: Colors.white),
-                      onPressed: () {
-                        // Handle profile picture change
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 8.0),
-                  const Text(
-                    "User Name",
-                    style: TextStyle(
-                      fontSize: 24.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
+
+      // Body section with Column layout
+      body: Column(
+        children: <Widget>[
+          // Monthly Expenses Header
+          Container(
+            color: Colors.grey[900],
+            child: const Center(
+              child: Text(
+                'Monthly Expenses',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
               ),
             ),
-            const SizedBox(height: 16.0),
+          ),
 
-            // User Information
-            const Card(
-              child: ListTile(
-                leading: Icon(Icons.person),
-                title: Text("User Name"),
-                subtitle: Text("user@example.com"),
+          // Donut Chart
+          SizedBox(
+            height: 300,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: DonutChart(),
+            ),
+          ),
+
+          // Budget Items header
+          Container(
+            padding: const EdgeInsets.only(top: 16.0),
+            child: const Text(
+              'Budget Items',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 16.0),
+          ),
 
-            // Settings Toolbar
-            ListTile(
-              leading: const Icon(Icons.lock),
-              title: const Text("Password & Recovery"),
-              trailing: const Icon(Icons.arrow_forward),
-              onTap: () {
-                // Handle password and recovery settings
+          // Dynamic list of budget items
+          Expanded(
+            child: ListView.builder(
+              itemCount: budgetItems.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(budgetItems[index]['name']),
+                  trailing: Text(
+                    '\$${budgetItems[index]['amount'].toStringAsFixed(2)}',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                );
               },
             ),
-            const Divider(),
-            ListTile(
-              leading: const Icon(Icons.privacy_tip),
-              title: const Text("Data Privacy"),
-              trailing: const Icon(Icons.arrow_forward),
-              onTap: () {
-                // Handle data privacy settings
-              },
-            ),
-            const Divider(),
-            ListTile(
-              leading: const Icon(Icons.question_answer),
-              title: const Text("FAQ"),
-              trailing: const Icon(Icons.arrow_forward),
-              onTap: () {
-                // Handle FAQ section
-              },
-            ),
-            const Divider(),
-            ListTile(
-              leading: const Icon(Icons.support),
-              title: const Text("Contact Support"),
-              trailing: const Icon(Icons.arrow_forward),
-              onTap: () {
-                // Handle contact support
-              },
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
 
       // Bottom Navigation Bar
@@ -122,16 +120,16 @@ class _UserProfilePageState extends State<BudgetPage> {
           ),
         ],
         onTap: (int index) {
-          // Handle bottom navigation bar taps
+          // Handle bottom navigation taps
           switch (index) {
             case 0:
               print("Home tapped");
               break;
             case 1:
-              print("Transactions tapped");
+              Navigator.pushNamed(context, '/transactions');
               break;
             case 2:
-              print("Budget tapped");
+              Navigator.pushNamed(context, '/budget');
               break;
             case 3:
               print("Overview tapped");
