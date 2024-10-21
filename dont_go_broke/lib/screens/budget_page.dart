@@ -1,6 +1,4 @@
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'user_profile.dart';
 import '../utils/donut_chart.dart';
 
 class BudgetPage extends StatefulWidget {
@@ -44,7 +42,7 @@ class _BudgetPageState extends State<BudgetPage> {
       // Body section with Column layout
       body: Column(
         children: <Widget>[
-          // Monthly Expenses Header
+          // monthly expenses container at top of page
           Container(
             color: Colors.grey[900],
             child: const Center(
@@ -59,7 +57,7 @@ class _BudgetPageState extends State<BudgetPage> {
             ),
           ),
 
-          // Donut Chart
+          // donut chart which comes after the monthly expenses container
           SizedBox(
             height: 300,
             child: Padding(
@@ -70,12 +68,15 @@ class _BudgetPageState extends State<BudgetPage> {
 
           // Budget Items header
           Container(
-            padding: const EdgeInsets.only(top: 16.0),
-            child: const Text(
-              'Budget Items',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+            color: Colors.grey[900],
+            child: const Center(
+              child: Text(
+                'Budget Items',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
               ),
             ),
           ),
