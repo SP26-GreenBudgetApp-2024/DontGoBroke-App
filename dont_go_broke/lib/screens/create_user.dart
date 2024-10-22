@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'main_page.dart';
 
-
 class CreateUsers extends StatefulWidget {
   const CreateUsers({super.key});
 
@@ -12,7 +11,8 @@ class CreateUsers extends StatefulWidget {
 class _CreateUserScreenState extends State<CreateUsers> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -64,12 +64,15 @@ class _CreateUserScreenState extends State<CreateUsers> {
                   // Sign in logic
                   print("Sign in with email: $email");
                   //go to main page
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const MainPage(),),
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MainPage(),
+                    ),
                   );
                 } else {
                   print("Passwords do not match!");
                 }
-
               },
               child: const Text("Sign In"),
             ),

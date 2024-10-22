@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'main_page.dart';
+import 'transactions_page.dart';
 
 
 
 class UserProfilePage extends StatefulWidget {
-  const UserProfilePage({super.key});
-
   @override
   _UserProfilePageState createState() => _UserProfilePageState();
 }
@@ -103,38 +103,52 @@ class _UserProfilePageState extends State<UserProfilePage> {
       // Bottom Navigation Bar
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(
+        items: [
+          const BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.receipt_long),
             label: 'Transactions',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.attach_money),
             label: 'Budget',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.analytics),
             label: 'Overview',
           ),
         ],
         onTap: (int index) {
-          // Handle bottom navigation bar taps
+          // Handle bottom navigation taps and navigation
           switch (index) {
             case 0:
               print("Home tapped");
+              // Navigate to Home page
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MainPage()),
+              );
               break;
             case 1:
               print("Transactions tapped");
+              // Navigate to Transactions page
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => TransactionsPage()),
+              );
               break;
             case 2:
               print("Budget tapped");
+              // Navigate to Budget page
+              // Navigator.push(context, MaterialPageRoute(builder: (context) => BudgetPage()));
               break;
             case 3:
               print("Overview tapped");
+              // Navigate to Overview page
+              // Navigator.push(context, MaterialPageRoute(builder: (context) => OverviewPage()));
               break;
           }
         },

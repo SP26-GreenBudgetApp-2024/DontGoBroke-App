@@ -17,9 +17,9 @@ class _SignInPageState extends State<SignInPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,// Sets the background color to white.
+      backgroundColor: Colors.white, // Sets the background color to white.
       appBar: AppBar(
-        title: const Text("Sign In"),// Sets the title of the app bar
+        title: const Text("Sign In"), // Sets the title of the app bar
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -49,9 +49,14 @@ class _SignInPageState extends State<SignInPage> {
                 // Handle sign-in logic here
                 String username = usernameController.text;
                 String password = passwordController.text;
-                print("Sign in with username: $username and password: $password");
+                print(
+                    "Sign in with username: $username and password: $password");
 
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const MainPage(),),
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MainPage(),
+                  ),
                 );
               },
               child: const Text("Sign In"),
@@ -60,9 +65,12 @@ class _SignInPageState extends State<SignInPage> {
             TextButton(
               onPressed: () {
                 // Navigate to Create User Account page
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateUsers(),
-                ),);
-
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CreateUsers(),
+                  ),
+                );
               },
               child: const Text("Create User Account"),
             ),
