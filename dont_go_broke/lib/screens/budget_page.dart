@@ -27,7 +27,7 @@ class _BudgetPageState extends State<BudgetPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text("Main Page"),
+        title: const Text("Budget Page"),
         actions: [
           IconButton(
             icon: const Icon(Icons.person),
@@ -58,10 +58,10 @@ class _BudgetPageState extends State<BudgetPage> {
           ),
 
           // donut chart which comes after the monthly expenses container
-          SizedBox(
+          const SizedBox(
             height: 300,
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: EdgeInsets.all(16.0),
               child: DonutChart(),
             ),
           ),
