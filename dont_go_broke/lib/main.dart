@@ -1,9 +1,25 @@
 import 'package:flutter/material.dart';
 import 'screens/login_page.dart';
 
-void main() {
-  runApp(const MyApp());
+//integrations for Firebase 
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
+Future<void> main() async {
+
+  // firebase communication entry 
+WidgetsFlutterBinding.ensureInitialized();
+await Firebase.initializeApp(
+  options: DefaultFirebaseOptions.currentPlatform,
+);
+  // 
+
+runApp(const MyApp());
+
+  
 }
+
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -15,3 +31,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+

@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "127457384617",
+    "firebase_url": "https://don-t-go-broke-ac18f-default-rtdb.firebaseio.com",
+    "project_id": "don-t-go-broke-ac18f",
+    "storage_bucket": "don-t-go-broke-ac18f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:127457384617:android:3a2c84fbf6f0e7df9df1b8",
+        "android_client_info": {
+          "package_name": "com.example.dgbapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnm5epPRNBkBxv2qT-KqAsG28VITCrjFM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:127457384617:android:eb0ca01d3e68cdfe9df1b8",
+        "android_client_info": {
+          "package_name": "com.example.dont_go_broke"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnm5epPRNBkBxv2qT-KqAsG28VITCrjFM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
