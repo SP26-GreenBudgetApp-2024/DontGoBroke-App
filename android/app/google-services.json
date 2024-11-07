@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "82766948392",
+    "project_id": "greenbudgetapp-project",
+    "storage_bucket": "greenbudgetapp-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:82766948392:android:5e64a3498aad8d47e96d1d",
+        "android_client_info": {
+          "package_name": "com.greenbudget.dontgobroke"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCac1Tz_jxqONUnV2efMw4r0K7j9jYx1OI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
