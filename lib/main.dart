@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+
 import 'pages/budget.dart'; 
 import 'pages/transactions.dart'; 
 import 'pages/overview.dart'; 
 import 'pages/settings.dart';
-import 'pages/home.dart'; 
+import 'pages/home.dart';  
+
+
 import 'login_page.dart';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -11,10 +14,9 @@ import 'firebase_options.dart';
 
 
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -24,16 +26,14 @@ void main() async {
 
 
 
-
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "Don't Go Broke",
       
-      home: const SignInPage(),
-      
       debugShowCheckedModeBanner: false, //remove debug banner
+      home: SignInPage(),
     );
   }
 }
@@ -55,10 +55,6 @@ class _MainPageState extends State<MainPage> {
 
 
   int _selectedIndex = 0; //track currently selected index
-
-  //example balance + income -- make editable later
-  double currentBalance = 1000.00; 
-  double monthlyIncome = 3000.00; 
 
   //update selected index + trigger a rebuild
   void _onItemTapped(int index) {
@@ -83,6 +79,7 @@ class _MainPageState extends State<MainPage> {
           IconButton(
             icon: const Icon(Icons.settings),
             onPressed: () {
+              
               //navigate to settings page 
               Navigator.push(
                 context,
@@ -92,28 +89,25 @@ class _MainPageState extends State<MainPage> {
                     selectedIndex: _selectedIndex, //pass current selected index
                   ),
                 ),
-              );
+              ); 
+
             },
           ),
         ],
       ),
 
 
+      
       body: IndexedStack(
         index: _selectedIndex, //current page index
         children: [
-          HomePage(
-            onNavigate: _onItemTapped,
-
-            //pass current balance + income
-            currentBalance: currentBalance, 
-            monthlyIncome: monthlyIncome, 
-          ),
+          HomePage(onNavigate: _onItemTapped,),
           TransactionsPage(onNavigate: _onItemTapped),
           BudgetPage(onNavigate: _onItemTapped),
           OverviewPage(onNavigate: _onItemTapped),
         ],
-      ),
+      ), 
+
 
 
       bottomNavigationBar: BottomNavigationBar(

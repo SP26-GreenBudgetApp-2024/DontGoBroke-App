@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 
+
 class OverviewPage extends StatelessWidget {
-  final Function(int) onNavigate; // Function to handle navigation
+  final Function(int) onNavigate; 
 
   const OverviewPage({super.key, required this.onNavigate});
 
@@ -11,8 +12,9 @@ class OverviewPage extends StatelessWidget {
     final screenSize = MediaQuery.of(context).size;
 
     return Scaffold(
+
       appBar: AppBar(
-        automaticallyImplyLeading: false, // Removes the back button
+        automaticallyImplyLeading: false, 
         title: const Text(
           'Monthly Expenditure',
           style: TextStyle(
@@ -20,28 +22,30 @@ class OverviewPage extends StatelessWidget {
             fontWeight: FontWeight.bold,
             color: Color.fromARGB(255, 39, 39, 39),
           ),
-          textAlign: TextAlign.center, // Center the title
+          textAlign: TextAlign.center, 
         ),
-        centerTitle: true, // Centers the title
+        centerTitle: true, 
       ),
-      body: SingleChildScrollView( // Allows scrolling in case of overflow
+
+
+      body: SingleChildScrollView( 
         child: Column(
           children: [
-            const SizedBox(height: 20), // Space between heading and chart
+            const SizedBox(height: 20), //space between heading and chart
             
-            // Bar chart section
+            //bar chart section
             Center(
               child: ConstrainedBox(
                 constraints: BoxConstraints(
                   maxWidth: screenSize.width * 0.8,
-                  maxHeight: screenSize.height * 0.4, // Fixed height for the bar chart
+                  maxHeight: screenSize.height * 0.4, 
                 ),
                 child: SimpleBarChart(
                   xAxisList: ['Aug', 'Sep', 'Oct'],
                   yAxisList: [
-                    [1600, 900, 470, 400, 300], // August values
-                    [1600, 950, 470, 500, 250], // September values
-                    [1600, 900, 470, 300, 250], // October values
+                    [1600, 900, 470, 400, 300], //august values
+                    [1600, 950, 470, 500, 250], //september values
+                    [1600, 900, 470, 300, 250], //october values
                   ],
                   xAxisName: 'Months',
                   yAxisName: 'Amount (USD)',
@@ -50,8 +54,9 @@ class OverviewPage extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 20), // Space for legend
-            // Legend section
+            const SizedBox(height: 20), 
+
+            //legend section
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -63,7 +68,7 @@ class OverviewPage extends StatelessWidget {
               ],
             ),
 
-            const SizedBox(height: 30), // Extra space below the chart
+            const SizedBox(height: 30), 
           ],
         ),
       ),
@@ -88,12 +93,11 @@ class OverviewPage extends StatelessWidget {
   }
 }
 
-// SimpleBarChart class remains unchanged
 
 class SimpleBarChart extends StatefulWidget {
   final List<String> xAxisList;
   final String xAxisName;
-  final List<List<double>> yAxisList; // Multiple values for each x-axis label
+  final List<List<double>> yAxisList; //multiple values for each x-axis label
   final String yAxisName;
   final double interval;
 
@@ -112,7 +116,7 @@ class SimpleBarChart extends StatefulWidget {
 
 class _SimpleBarChartState extends State<SimpleBarChart> {
   late List<String> xAxisList;
-  late List<List<double>> yAxisList; // Multiple values per x-axis
+  late List<List<double>> yAxisList; //multiple values per x-axis
   late String xAxisName;
   late String yAxisName;
   late double interval;
@@ -186,19 +190,19 @@ class _SimpleBarChartState extends State<SimpleBarChart> {
             ),
           ),
         ),
-        maxY: 1700, // Adjust to cover the highest y value
+        maxY: 1700, 
       ),
     );
   }
 
   Color _getBarColor(int index) {
     switch (index) {
-      case 0: return Colors.blue[200]!;  // Rent
-      case 1: return Colors.red[200]!;   // Car
-      case 2: return Colors.green[200]!; // Utilities
-      case 3: return Colors.yellow[200]!; // Food
-      case 4: return Colors.purple[200]!; // Other
-      default: return Colors.black; // Default case
+      case 0: return Colors.blue[200]!;  //rent
+      case 1: return Colors.red[200]!;   //car
+      case 2: return Colors.green[200]!; //utilities
+      case 3: return Colors.yellow[200]!; //food
+      case 4: return Colors.purple[200]!; //other
+      default: return Colors.black; //default case
     }
   }
 
@@ -246,4 +250,4 @@ class _SimpleBarChartState extends State<SimpleBarChart> {
     }
     return SideTitleWidget(child: Text(text, style: style), axisSide: meta.axisSide);
   }
-}
+} 

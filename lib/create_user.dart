@@ -1,34 +1,92 @@
-import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'main.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
+import 'login_page.dart'; // Make sure you have a login page to navigate to after signup.
 
-class CreateUsers extends StatefulWidget {
-  const CreateUsers({super.key});
 
+
+class CreateUserPage extends StatefulWidget {
   @override
-  _CreateUserScreenState createState() => _CreateUserScreenState();
+  _CreateUserPageState createState() => _CreateUserPageState();
 }
 
-class _CreateUserScreenState extends State<CreateUsers> {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController = TextEditingController();
-  final FirebaseAuth _auth = FirebaseAuth.instance; // Initialize Firebase Auth
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance; // Initialize Firestore
+class _CreateUserPageState extends State<CreateUserPage> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  String? errorMessage; // Variable to store the error message
+  //email + password validation
+  bool _isValidEmail(String email) {
+    String pattern = r'^[^@]+@[^@]+\.[^@]+$';
+    RegExp regex = RegExp(pattern);
+    return regex.hasMatch(email);
+  }
 
-  // Function to show an AlertDialog with detailed user data
-  void _showUserDataDialog(Map<String, dynamic>? userData) {
+  bool _isValidPassword(String password) {
+    //password must be at least 6 characters
+    return password.length >= 6;
+  }
+
+  //add input validation
+  void _signUp() async {
+    String email = _emailController.text.trim();
+    String password = _passwordController.text.trim();
+
+    if (!_isValidEmail(email)) {
+      _showErrorDialog("Invalid email format. Please enter a valid email.");
+      return;
+    }
+    if (!_isValidPassword(password)) {
+      _showErrorDialog("Password must be at least 6 characters long.");
+      return;
+    }
+
+    try {
+      //create a new user using firebase auth
+      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      if (userCredential.user != null) {
+        //get user ID
+        String userId = userCredential.user!.uid;
+
+        //create a folder named after the UID in firebase storage
+        //final storageRef = FirebaseStorage.instance.ref().child('users/$userId/');
+  
+        
+        //save user data in firestore
+        await _firestore.collection('users').doc(userId).set({
+          'email': email,
+          'uid': userId,
+          'createdAt': Timestamp.now(),
+        });
+
+        //navigate to sign-in page
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => SignInPage()),
+        );
+      }
+    } catch (e) {
+      _showErrorDialog("An error occurred: ${e.toString()}");
+    }
+  }
+
+
+  void _showErrorDialog(String message) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text("User Data"),
-        content: Text("User information: ${userData.toString()}"),
+        title: const Text("Error"),
+        content: Text(message),
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () => Navigator.pop(context),
             child: const Text("OK"),
           ),
         ],
@@ -36,123 +94,35 @@ class _CreateUserScreenState extends State<CreateUsers> {
     );
   }
 
-  // Function to read user data from Firestore
-  void _getUserData(String userId) async {
-    DocumentSnapshot snapshot = await _firestore.collection('users').doc(userId).get();
-
-    if (snapshot.exists) {
-      _showUserDataDialog(snapshot.data() as Map<String, dynamic>?); // Show data in a dialog
-    } else {
-      setState(() {
-        errorMessage = "No user data found for this ID."; // Update the error message
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text("Create Account"),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextField(
-              controller: emailController,
-              decoration: const InputDecoration(
-                labelText: "Email",
-                border: OutlineInputBorder(),
+      appBar: AppBar(title: const Text('Create an Account')),
+      body: SingleChildScrollView(  
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              TextField(
+                controller: _emailController,
+                decoration: const InputDecoration(labelText: 'Email'),
+                keyboardType: TextInputType.emailAddress,
               ),
-              keyboardType: TextInputType.emailAddress,
-            ),
-            const SizedBox(height: 16.0),
-            TextField(
-              controller: passwordController,
-              decoration: const InputDecoration(
-                labelText: "Password",
-                border: OutlineInputBorder(),
+              const SizedBox(height: 16),
+              TextField(
+                controller: _passwordController,
+                decoration: const InputDecoration(labelText: 'Password'),
+                obscureText: true,
               ),
-              obscureText: true,
-            ),
-            const SizedBox(height: 16.0),
-            TextField(
-              controller: confirmPasswordController,
-              decoration: const InputDecoration(
-                labelText: "Confirm Password",
-                border: OutlineInputBorder(),
+              const SizedBox(height: 32),
+              ElevatedButton(
+                onPressed: _signUp,
+                child: const Text('Sign Up'),
               ),
-              obscureText: true,
-            ),
-            const SizedBox(height: 16.0),
-            
-            // Display error message if present
-            if (errorMessage != null) 
-              Text(
-                errorMessage!,
-                style: const TextStyle(color: Color.fromARGB(255, 107, 47, 43)), 
-                textAlign: TextAlign.center, 
-              ),
-
-            const SizedBox(height: 32.0),
-            ElevatedButton(
-              onPressed: () async {
-                String email = emailController.text.trim();
-                String password = passwordController.text;
-                String confirmPassword = confirmPasswordController.text;
-
-                setState(() {
-                  errorMessage = null; // Clear any previous error message
-                });
-
-                if (password == confirmPassword) {
-                  try {
-                    UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
-                      email: email,
-                      password: password,
-                    );
-
-                    // Store user information in Firestore
-                    await _firestore.collection('users').doc(userCredential.user?.uid).set({
-                      'email': email,
-                      'createdAt': Timestamp.now(),
-                      // Add other user information here if needed
-                    }).then((_) {
-                      _getUserData(userCredential.user!.uid); // Retrieve and show user data
-                    }).catchError((error) {
-                      setState(() {
-                        errorMessage = "Failed to save user information: $error"; // Show Firestore error
-                      });
-                    });
-
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainPage()));
-                  } on FirebaseAuthException catch (e) {
-                    setState(() {
-                      if (e.code == 'weak-password') {
-                        errorMessage = 'The password provided is too weak. Try again.';
-                      } else if (e.code == 'email-already-in-use') {
-                        errorMessage = 'The account already exists for that email. Try again.';
-                      } else if (e.code == 'invalid-email') {
-                        errorMessage = 'The email address is not valid. Try again.';
-                      } else {
-                        errorMessage = 'Error: ${e.message} Try again.';
-                      }
-                    });
-                  }
-                } else {
-                  setState(() {
-                    errorMessage = "Passwords do not match. Try again.";
-                  });
-                }
-              },
-              child: const Text("Create Account"),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
-}
+} 
