@@ -1,1 +1,38 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"greenbudgetapp-project","appId":"1:82766948392:android:5e64a3498aad8d47e96d1d","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"greenbudgetapp-project","configurations":{"android":"1:82766948392:android:5e64a3498aad8d47e96d1d","ios":"1:82766948392:ios:7388c3fb39d376e9e96d1d","macos":"1:82766948392:ios:7388c3fb39d376e9e96d1d","web":"1:82766948392:web:f84aa148871a1ebbe96d1d","windows":"1:82766948392:web:5d4f871449293d23e96d1d"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "greenbudgetapp-project",
+          "appId": "1:82766948392:android:5e64a3498aad8d47e96d1d",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "greenbudgetapp-project",
+          "configurations": {
+            "android": "1:82766948392:android:5e64a3498aad8d47e96d1d",
+            "ios": "1:82766948392:ios:7388c3fb39d376e9e96d1d",
+            "macos": "1:82766948392:ios:7388c3fb39d376e9e96d1d",
+            "web": "1:82766948392:web:f84aa148871a1ebbe96d1d",
+            "windows": "1:82766948392:web:5d4f871449293d23e96d1d"
+          }
+        }
+      }
+    }
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ]
+    }
+  ]
+}

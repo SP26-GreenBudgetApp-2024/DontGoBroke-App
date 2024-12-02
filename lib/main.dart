@@ -8,8 +8,11 @@ import 'pages/home.dart';
 
 
 import 'login_page.dart';
+import 'create_user.dart';
+
 
 import 'package:firebase_core/firebase_core.dart';
+
 import 'firebase_options.dart';
 
 
@@ -20,6 +23,16 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+    //Use 127.0.0.1 instead of localhost -- could use this for testing phone verification stuff, 
+    //since trying to do it from localhost gives a 'invalid application verifier' error. i think its
+    // because Google rolled out an update where they don't accept localhost as a valid domain, making it harder to debug.
+    //I ended up just using a test number + code that I put in Firebase to do phone verification, but I'll just leave this here for future reference
+
+    /* 
+    if (DefaultFirebaseOptions.currentPlatform == DefaultFirebaseOptions.web) {
+      FirebaseAuth.instance.useAuthEmulator('127.0.0.1', 9099); 
+    }  */
 
   runApp(MyApp());
 }
@@ -32,8 +45,21 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: "Don't Go Broke",
       
+      initialRoute: '/',
+      routes: {
+        '/': (context) => SignInPage(),
+        '/createuser': (context) => CreateUserPage(),
+      },
+
+      theme: ThemeData(
+          focusColor: Colors.black, // Set the default focus color to black
+        ),
+
+      
+
       debugShowCheckedModeBanner: false, //remove debug banner
-      home: SignInPage(),
+    
+      
     );
   }
 }
@@ -147,3 +173,6 @@ class _MainPageState extends State<MainPage> {
     );
   }
 }
+
+
+

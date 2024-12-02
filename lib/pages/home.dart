@@ -2,6 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+
+
+import 'home_subpages/upcoming_bills.dart';
+import 'home_subpages/spending_summary.dart';
+import 'home_subpages/upcoming_debts.dart';
+import 'home_subpages/tips_insights.dart';
+
+
+
 class HomePage extends StatefulWidget {
   final Function(int) onNavigate;
 
@@ -18,6 +27,8 @@ class _HomePageState extends State<HomePage> {
   double currentBalance = 0.00;
   double monthlyIncome = 0.00;
 
+  String _name = '';
+
   final TextEditingController balanceController = TextEditingController();
   final TextEditingController incomeController = TextEditingController();
 
@@ -27,7 +38,9 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _loadUserData(); //load user data when the app starts
+    _fetchName();
+    _loadBalanceAndIncome(); 
+     _listenForBalanceUpdates();
   }
 
   @override
@@ -37,11 +50,25 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
-  Future<void> _loadUserData() async {
+
+
+  Future<void> _fetchName() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final doc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+      setState(() {
+        _name = doc['name'] ?? 'User Name';
+
+      });
+    }
+  }
+
+
+
+  Future<void> _loadBalanceAndIncome() async {
     try {
       final user = _auth.currentUser;
       if (user != null) {
-        //get user document from Firestore
         DocumentSnapshot userDoc = await _firestore
             .collection('users')
             .doc(user.uid)
@@ -52,7 +79,6 @@ class _HomePageState extends State<HomePage> {
             currentBalance = userDoc['currentBalance'] ?? 0.00;
             monthlyIncome = userDoc['monthlyIncome'] ?? 0.00;
 
-            //update text fields with loaded data
             balanceController.text = currentBalance.toStringAsFixed(2);
             incomeController.text = monthlyIncome.toStringAsFixed(2);
           });
@@ -63,11 +89,25 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+
+  void _listenForBalanceUpdates() {
+    final user = _auth.currentUser;
+    if (user != null) {
+      _firestore.collection('users').doc(user.uid).snapshots().listen((snapshot) {
+        if (snapshot.exists) {
+          setState(() {
+            currentBalance = snapshot['currentBalance'] ?? 0.00;
+            balanceController.text = currentBalance.toStringAsFixed(2);
+          });
+        }
+      });
+    }
+  }
+
   Future<void> _updateUserData(String field, double value) async {
     try {
       final user = _auth.currentUser;
       if (user != null) {
-        //update field in Firestore
         await _firestore.collection('users').doc(user.uid).set({
           field: value,
         }, SetOptions(merge: true)); 
@@ -82,219 +122,327 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.zero,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
+               
           children: [
-            const Text(
-              "Welcome Back!",
-              style: TextStyle(
-                fontSize: 24.0,
-                fontWeight: FontWeight.bold,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 16.0),
+            const SizedBox(height: 34.0),
 
-
-            //current balance card
-            Card(
-              color: const Color.fromARGB(255, 191, 211, 168),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Current Balance",
-                            style: TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.w500,
-                            ),
+                Center(
+                  child: RichText(
+                    text: TextSpan(
+                      text: 'Welcome Back,  ',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 28, 
+                      ),
+                      children: [
+                        TextSpan(
+                          text: _name + '!',
+                          style: TextStyle(
+                            color: const Color(0xFF535E4F),
+                            fontWeight: FontWeight.bold,
+                             fontStyle: FontStyle.italic,
+                            fontSize: 28, 
                           ),
-                          const SizedBox(height: 8.0),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
 
-                          //inline editing for Balance
-                          isEditingBalance
-                              ? TextField(
+
+            const SizedBox(height: 28.0),
+
+            Container(
+                height: 90, 
+                decoration: BoxDecoration(
+                  color: const Color(0xFFE3EAE8), 
+                  border: const Border(
+                    top: BorderSide(color: Color(0xFF2D372D), width: 1.6), 
+                    bottom:BorderSide(color: Color(0xFF2D372D), width: 1.6), 
+                  ),
+
+                ),
+                padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 30.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        const Text(
+                          "Current Balance:",
+                          style: TextStyle(
+                            fontSize: 26.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(width: 8.0),
+                        isEditingBalance
+                            ? SizedBox(
+                                width: 120, 
+                                child: TextField(
                                   controller: balanceController,
                                   keyboardType: TextInputType.number,
-                                  decoration: const InputDecoration(
-                                    labelText: "Enter balance",
-                                    border: UnderlineInputBorder(),
-                                    isDense: true,
+                                  style: const TextStyle(
+                                    fontSize: 24.0, 
+                                    color: Color.fromARGB(255, 113, 116, 114),
+                                   
+                                  ),
+                                  decoration: InputDecoration(
+                                    hintText: "\$${currentBalance.toStringAsFixed(2)}",
+                                    border: InputBorder.none, 
+                                    isDense: true, 
+                                    contentPadding: EdgeInsets.zero,
                                   ),
                                   onSubmitted: (value) {
-                                    final newBalance =
-                                        double.tryParse(value) ?? 0.00;
+                                    final newBalance = double.tryParse(value) ?? 0.00;
                                     setState(() {
                                       currentBalance = newBalance;
                                       isEditingBalance = false;
                                     });
-                                    _updateUserData(
-                                        'currentBalance', newBalance);
+                                    _updateUserData('currentBalance', newBalance);
                                   },
-                                )
-                              : Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      "\$${currentBalance.toStringAsFixed(2)}",
-                                      style: const TextStyle(
-                                        fontSize: 18.0,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    IconButton(
-                                      icon: const Icon(Icons.edit),
-                                      onPressed: () {
-                                        setState(() {
-                                          isEditingBalance = true;
-                                        });
-                                      },
-                                    ),
-                                  ],
                                 ),
-                        ],
-                      ),
+                              )
+                            : Text(
+                                "\$${currentBalance.toStringAsFixed(2)}",
+                                style: const TextStyle(
+                                  fontSize: 24.0, 
+                               
+                                ),
+                              ),
+                      ],
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.edit),
+                      onPressed: () {
+                        setState(() {
+                          isEditingBalance = true;
+                        });
+                      },
                     ),
                   ],
                 ),
               ),
-            ),
 
 
-            const SizedBox(height: 16.0),
+              Container(
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF3FBDC),
+                  border: const Border(
+                    top: BorderSide.none, 
+                    bottom:BorderSide(color: Color(0xFF2D372D), width: 1.0),
+                  ),
 
-
-
-            //monthly income card
-            Card(
-              color: const Color.fromARGB(255, 191, 211, 168),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                ),
+                padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 30.0),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Monthly Income",
-                            style: TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.w500,
-                            ),
+                    Row(
+                      children: [
+                        const Text(
+                          "Monthly Income:",
+                          style: TextStyle(
+                            fontSize: 19.0,
+                            fontWeight: FontWeight.bold,
                           ),
-                          const SizedBox(height: 8.0),
-
-                          //inline editing for income
-                          isEditingIncome
-                              ? TextField(
+                        ),
+                        const SizedBox(width: 8.0),
+                        isEditingIncome
+                            ? SizedBox(
+                                width: 120, 
+                                child: TextField(
                                   controller: incomeController,
                                   keyboardType: TextInputType.number,
-                                  decoration: const InputDecoration(
-                                    labelText: "Enter income",
-                                    border: UnderlineInputBorder(),
-                                    isDense: true,
+                                  style: const TextStyle(
+                                    fontSize: 19.0, 
+                                    color: Color.fromARGB(255, 113, 116, 114),
+                          
+                                  ),
+                                  decoration: InputDecoration(
+                                    hintText: "\$${monthlyIncome.toStringAsFixed(2)}",
+                                    border: InputBorder.none, 
+                                    isDense: true, 
+                                    contentPadding: EdgeInsets.zero,
                                   ),
                                   onSubmitted: (value) {
-                                    final newIncome =
-                                        double.tryParse(value) ?? 0.00;
+                                    final newIncome = double.tryParse(value) ?? 0.00;
                                     setState(() {
                                       monthlyIncome = newIncome;
                                       isEditingIncome = false;
                                     });
                                     _updateUserData('monthlyIncome', newIncome);
                                   },
-                                )
-                              : Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      "\$${monthlyIncome.toStringAsFixed(2)}",
-                                      style: const TextStyle(
-                                        fontSize: 18.0,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    IconButton(
-                                      icon: const Icon(Icons.edit),
-                                      onPressed: () {
-                                        setState(() {
-                                          isEditingIncome = true;
-                                        });
-                                      },
-                                    ),
-                                  ],
                                 ),
+                              )
+                            : Text(
+                                "\$${monthlyIncome.toStringAsFixed(2)}",
+                                style: const TextStyle(
+                                  fontSize: 19.0, 
+                            
+                                ),
+                              ),
+                      ],
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.edit),
+                      onPressed: () {
+                        setState(() {
+                          isEditingIncome = true;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ),
 
 
+            const SizedBox(height:52.0),
+
+
+            Center(
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    double buttonWidth = (constraints.maxWidth / 10) - 10; 
+                    buttonWidth = buttonWidth < 200 ? 200 : buttonWidth; 
+
+                    return Container(      
+                      padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
+                   
+
+                      child: GridView.count(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        crossAxisCount: 2,
+                        mainAxisSpacing: 20.0,
+                        crossAxisSpacing: 20.0,
+                        childAspectRatio: 2,
+                        children: [
+                          SizedBox(
+                            width: buttonWidth,
+                            height: 100.0, 
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const UpcomingBillsPage(),
+                                  ),
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                foregroundColor: const Color(0xFF59735C),
+                                backgroundColor: const Color(0xFFF2F7F1),
+                                side: const BorderSide(color: Color(0xFF3C583C), width: 1.3),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                                textStyle: const TextStyle(fontSize: 16),
+                                elevation: 2.5,
+                              ),
+                              child: const Center(
+                                child: Text("Upcoming Bills"),
+                              ),
+                            ),
+                          ),
+
+                          SizedBox(
+                            width: buttonWidth,
+                            height: 100.0,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const SpendingsSummaryPage(),
+                                  ),
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                foregroundColor: const Color(0xFF435145),
+                                backgroundColor: const Color.fromARGB(255, 215, 222, 220),
+                                side: const BorderSide(color: Color(0xFF39403C), width: 1.3),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                                textStyle: const TextStyle(fontSize: 16),
+                                elevation: 2.5,
+                              ),
+                              child: const Center(
+                                child: Text("Spending Summary"),
+                              ),
+                            ),
+                          ),
+
+                          SizedBox(
+                            width: buttonWidth,
+                            height: 100.0,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const UpcomingDebtsPage(),
+                                  ),
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                foregroundColor: const Color(0xFF435145),
+                                backgroundColor: const Color.fromARGB(255, 215, 222, 220),
+                                side: const BorderSide(color: Color(0xFF39403C), width: 1.3),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                                textStyle: const TextStyle(fontSize: 16),
+                                elevation: 2.5,
+                              ),
+                              child: const Center(
+                                child: Text("Upcoming Debts"),
+                              ),
+                            ),
+                          ),
+
+
+                          SizedBox(
+                            width: buttonWidth,
+                            height: 100.0,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const TipsInsightsPage(),
+                                  ),
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                foregroundColor: const Color(0xFF59735C),
+                                backgroundColor: const Color(0xFFF2F7F1),
+                                side: const BorderSide(color: Color(0xFF3C583C), width: 1.3),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                                textStyle: const TextStyle(fontSize: 16),
+                                elevation: 2.5,
+                              ),
+                              child: const Center(
+                                child: Text("Tips and Insights"),
+                              ),
+                            ),
+                          ),
 
 
                         ],
                       ),
-                    ),
-                  ],
+                    );
+
+                  },
+
                 ),
-              ),
-            ),
-
-
-            
-
-            const SizedBox(height: 32.0),
-
-
-            //buttons section
-            Center(
-              child: Container(
-                width: 600,
-                child: GridView.count(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  crossAxisCount: 2,
-                  childAspectRatio: 2,
-                  mainAxisSpacing: 40.0,
-                  crossAxisSpacing: 40.0,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        //navigate to upcoming bills page
-                      },
-                      child: const Text("Upcoming Bills"),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        //navigate to spending summary page
-                      },
-                      child: const Text("Spending Summary"),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        //navigate to debt payments page
-                      },
-                      child: const Text("Debt Payments"),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        //navigate to tips and insights page
-                      },
-                      child: const Text("Tips & Insights"),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-
-
-
-
+              )
 
 
           ],

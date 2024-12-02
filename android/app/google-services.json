@@ -12,7 +12,20 @@
           "package_name": "com.greenbudget.dontgobroke"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "82766948392-41lfkeommi7t33b57vb29ktm8e36ngrs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.greenbudget.dontgobroke",
+            "certificate_hash": "e7b34cec8eba134ebd61078261062575cea67980"
+          }
+        },
+        {
+          "client_id": "82766948392-443r0tsv53f4eepmkvu8kokn5jq2l1hd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCac1Tz_jxqONUnV2efMw4r0K7j9jYx1OI"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "82766948392-443r0tsv53f4eepmkvu8kokn5jq2l1hd.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "82766948392-oab2eg41ka6c4cjgndi731nqmqvpe81d.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.dontGoBroke"
+              }
+            }
+          ]
         }
       }
     }
